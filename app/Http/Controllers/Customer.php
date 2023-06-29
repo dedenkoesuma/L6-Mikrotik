@@ -22,4 +22,20 @@ class Customer extends Controller
         ];
         return view('customer/index', $params);
     }
+        public function detail() {
+        $url = "https://mikrotik.startxindonesia.co.id/api/v1/customer/detail?type=parameter&param=".$_GET['parameter']."&include=subscription";
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $customerDetail = json_decode($response, true);
+        $params = [
+            'details'=> $customerDetail['response']['data']['subscription']['data'],
+            'title' => 'Detail'
+        ];
+        return view('customer/detail',$params);
+    }
 }
